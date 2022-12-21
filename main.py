@@ -20,8 +20,8 @@ def getCourts():
     
 @app.get('/getAvailableSlots')
 def getSlots(court_id):
-    data=executeQuery(f"""select st.slot_id,st.slot_time from public.slots st 
-where st.slot_id not in (select slot_id from public.booking_table where ground_id={court_id})""")
+    print(court_id)
+    data=executeQuery(f"select st.slot_id,st.slot_time from public.slots st where st.slot_id not in (select slot_id from public.booking_table where ground_id='{court_id}')")
     return data
 
 @app.get('/getBookings')
