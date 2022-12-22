@@ -21,7 +21,7 @@ def getCourts():
 @app.get('/getAvailableSlots')
 def getSlots(court_id):
     print(court_id)
-    data=executeQuery(f"select st.slot_id,st.slot_time from public.slots st where st.slot_id not in (select slot_id from public.booking_table where ground_id='{court_id}')")
+    data=executeQuery(f"select st.slot_id,st.slot_time from public.slots st where st.slot_id not in (select slot_id from public.booking_table bt where bt.ground_id='{court_id}' and TO_DATE(bt.booking_id,'YYYY-MM-DD HH24:MI:SS')=CAST( NOW() AS Date) )")
     return data
 
 @app.get('/getBookings')
