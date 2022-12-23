@@ -63,5 +63,5 @@ def deletebookings():
 
 @app.put('/updatedcouty')
 def updatedcouty(court_maintainence:bool,court_id):
-    data=executeQuery("UPDATE play_grounds SET under_maintainence = %s WHERE ground_id = %s",(court_maintainence,court_id))
+    data=executeQuery(f"UPDATE play_grounds SET under_maintainence = '{court_maintainence}' WHERE ground_id = '{court_id}'")
     return data
