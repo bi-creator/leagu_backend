@@ -1,37 +1,39 @@
-import psycopg2
-def executeQuery(query,datatoinsert=[]):
-    conn = psycopg2.connect(
-        database="league", user='postgres', password='manjith', host='localhost', port= '5432'
-        )
-    cursor = conn.cursor()
-    if(datatoinsert):
+import sqlite3
+def executeQuery(query):
+    conn = sqlite3.connect('leadgu')
+    if("INSERT" in query or 'UPDATE' in query ):
         try:
-            # print(query,datatoinsert)
-            cursor.execute(query,datatoinsert)
+            print(query)
+            conn.execute(query)
             conn.commit()
-            # count = cursor.rowcount
+            conn.close()
             return "Updated successfully "
-        except:
+        except :
+            conn.close()
             return("Something Went Wrong")
     elif('DELETE' in query):
         try:
-            cursor.execute(query)
+            conn.execute(query)
             conn.commit()
+            conn.close()
             return("Data Deleted")
         except:
+            conn.close()
             return("Something Went Wrong")
 
     else:
-        try:
-            cursor.execute(query)
-            data=[]
+        # try:
+            print(query)
+            cursor=conn.execute(query)
             column_names = [desc[0] for desc in cursor.description]
-            for row in cursor:
+            data=[]
+            for i in cursor:
                 a={}
-                for col in  column_names:
-                    a[col]=row[column_names.index(col)]
+                for b in column_names:
+                    a[b]=i[column_names.index(b)]
                 data.append(a)
             conn.close()
             return(data)
-        except:
-            return("Something Went Wrong")
+        # except:
+        #     conn.close()
+        #     return("Something Went Wrong")
