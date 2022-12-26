@@ -2,24 +2,24 @@ import sqlite3
 def executeQuery(query):
     conn = sqlite3.connect('leadgu')
     if("INSERT" in query or 'UPDATE' in query ):
-        try:
+        # try:
             print(query)
             conn.execute(query)
             conn.commit()
             conn.close()
             return "Updated successfully "
-        except :
-            conn.close()
-            return("Something Went Wrong")
+        # except :
+        #     conn.close()
+        #     return("Something Went Wrong")
     elif('DELETE' in query):
-        try:
+        # try:
             conn.execute(query)
             conn.commit()
             conn.close()
             return("Data Deleted")
-        except:
-            conn.close()
-            return("Something Went Wrong")
+        # except:
+        #     conn.close()
+        #     return("Something Went Wrong")
 
     else:
         # try:
