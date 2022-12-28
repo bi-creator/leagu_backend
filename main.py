@@ -1,8 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Response, status
+import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from query import executeQuery
 from datetime import datetime,timedelta
 import pytz
+from pydantic import BaseModel
+class BookCourt(BaseModel):
+    name: str
+    email:str
+    contact:str
+    ground_id:str
+    slot_id:str
+name='NAME'
+password="PASSWORD"
 IST = pytz.timezone('Asia/Kolkata')
 app = FastAPI()
 app.add_middleware(
@@ -47,9 +57,9 @@ where is_cancled=false and substr(bt.booking_id, 1, 10)= '{str(datetime.now(IST)
     return(data)
 
 @app.post('/addBooking')
-def addBooking(name, email,contact,ground_id,slot_id):
+def addBooking(bookongdetails:BookCourt):
     booking_id=str(datetime.now(IST))
-    data=executeQuery(f"INSERT INTO booking_table (booking_id, name, email,contact,ground_id,slot_id) VALUES ('{booking_id}','{name}','{email}','{contact}','{ground_id}','{slot_id}')")
+    data=executeQuery(f"INSERT INTO booking_table (booking_id, name, email,contact,ground_id,slot_id) VALUES ('{booking_id}','{bookongdetails.name}','{bookongdetails.email}','{bookongdetails.contact}','{bookongdetails.ground_id}','{bookongdetails.slot_id}')")
     return data
 
 @app.put('/cancleBooking')
@@ -67,3 +77,15 @@ def deletebookings():
 def updatedcouty(court_maintainence:bool,court_id):
     data=executeQuery(f"UPDATE play_grounds SET under_maintainence = '{court_maintainence}' WHERE ground_id = '{court_id}'")
     return data
+
+@app.get('/login',status_code=200)
+def login(username,userpass,response: Response):
+    if(username!=name):
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return
+    elif(userpass!=password):
+        response.status_code=status.HTTP_401_UNAUTHORIZED
+        return
+    else:
+        response.status_code=status.HTTP_200_OK
+        return
