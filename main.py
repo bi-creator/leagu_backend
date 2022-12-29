@@ -52,7 +52,7 @@ def getCourts():
 @app.get('/getAvailableSlots')
 def getSlots(court_id):
     print(court_id)
-    data=executeQuery(f"select st.slot_id,st.slot_time from slots st where (st.slot_id not in (select slot_id from booking_table bt where bt.ground_id='{court_id}' and substr(bt.booking_id, 1, 10)= '{str(datetime.now(IST))[0:10]}' and bt.is_cancled=false)) or (st.slot_id in (select slot_id from booking_table bt where bt.ground_id='{court_id}' and substr(bt.booking_id, 1, 10)='{str(datetime.now(IST))[0:10]}' and bt.is_cancled=true))")
+    data=executeQuery(f"select st.slot_id,st.slot_time from slots st where st.slot_id not in (select slot_id from booking_table bt where bt.ground_id='{court_id}' and substr(bt.booking_id, 1, 10)= '{str(datetime.now(IST))[0:10]}' and bt.is_cancled=0)")
     return data
 
 @app.get('/getBookings')
